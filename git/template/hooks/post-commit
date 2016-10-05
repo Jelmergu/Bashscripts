@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Post commit function for git
+#
+# The function determines the git root and clean the gitCommit file if it exists
+# 
+# Made by: Jelmer Wijnja
+# Made for: Personal use
+
+rootDir=$(git rev-parse --show-toplevel)
+if [ -f ${rootDir}/gitCommit.txt ] 
+then
+    echo '' > ${rootDir}/gitCommit.txt
+fi
