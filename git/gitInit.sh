@@ -23,12 +23,12 @@ function gitInit {
         then
         echo "First Commit" > gitCommit.txt
         echo "${PWD}" >> ~/gitrepos.txt
-        sort ~/gitrepos.txt | uniq > ~/gitrepos.txt
+        sort ~/gitrepos.txt | uniq -u > ~/gitrepos.txt
     fi
     
     if [[ ${gitExists} == true ]]
         then
         echo "${tmp}" >> .gitignore
-        sort .gitignore | uniq > .gitignore
+        sort .gitignore | uniq -u > .gitignore
     fi
 }
