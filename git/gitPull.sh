@@ -9,6 +9,7 @@ function gitPull {
     branch=$(git rev-parse --abbrev-ref HEAD)
     remote="origin"
     next=""
+    option=""
     for var in $@
     do
         if [[ ${next} = "-b" ]]
@@ -20,8 +21,14 @@ function gitPull {
             remote=${var}
             next=""
         else
+            if [[ ${next} != "" ]]
+                then
+                option="${option} ${next}"
+                next=""
+            fi
             next=${var}
         fi
     done
-    git pull "${remote}" "${branch}"
+    option="${option} ${next}"
+    git pull"${option} ${remote}" "${branch}"
 }
