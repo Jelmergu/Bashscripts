@@ -10,7 +10,12 @@ function gitInit {
     if [ -d .git ]
         then
         gitExists=true
-        tmp=$(cat .gitignore)
+        tmp=""
+        if [ -f .gitignore ]
+            then
+            tmp=$(cat .gitignore)
+        fi
+
     else
         gitExists=false
     fi

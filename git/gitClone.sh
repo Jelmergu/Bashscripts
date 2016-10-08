@@ -30,6 +30,6 @@ function gitClone {
         else
             ${fullPath}="${PWD}/${destination}"
         fi
-        echo ${fullPath} >> ~/gitrepos.txt
+        echo "${fullPath}" >> ~/gitrepos.txt
     fi
 }
