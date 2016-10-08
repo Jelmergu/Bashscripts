@@ -30,5 +30,9 @@ function gitPull {
         fi
     done
     option="${option} ${next}"
+    if [[ ${option} != " " ]]
+        then
+        option=""
+    fi
     git pull"${option} ${remote}" "${branch}"
 }

@@ -57,7 +57,11 @@ function gitPush {
             next=${var}
         fi
     done
-    option="${option} ${next}"
-    echo "git push${option} ${remote} ${branch}"
-    git push"${option} ${remote}" "${branch}"
+    option="${option}${next}"
+    if [[ ${option} != " " ]]
+        then
+        option=""
+    fi
+    echo "git push ${option}${remote} ${branch}"
+    git push "${option}""${remote}" "${branch}"
 }
