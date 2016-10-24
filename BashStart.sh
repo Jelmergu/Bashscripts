@@ -7,7 +7,7 @@ fileLoc=$(dirname "${BASH_SOURCE[0]}")
 . ${fileLoc}/function_rd.sh
 . ${fileLoc}/function_addAlias.sh
 . ${fileLoc}/function_rebash.sh
-. ${fileLoc}/function_addSite.sh
+
 
 
 #Git functions:x
