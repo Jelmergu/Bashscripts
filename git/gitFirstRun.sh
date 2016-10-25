@@ -6,7 +6,7 @@
 # Made for: Personal use
 
 function gitFirstRun {
-    templateDir='/.git_template'
+    templateDir=$(dirname "${BASH_SOURCE[0]}")"/template"
     if [[ -d ${templateDir} ]]
         then
         echo "Directory is present, no need to create directory"
