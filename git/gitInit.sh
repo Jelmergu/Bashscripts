@@ -4,25 +4,28 @@
 # 
 # Made by: Jelmer Wijnja
 # Made for: Personal use
+# TODO check for submodules
 
 function gitInit {
 
-    if [ -d .git ]
+    if [ -d .git or -f .git ]
         then
         gitExists=true
         tmp=""
+
         if [ -f .gitignore ]
             then
             tmp=$(cat .gitignore)
         fi
-
     else
         gitExists=false
     fi
     git init
 
-    cat .git/gitIgnoreTemplate.txt > .gitignore
-    rm .git/gitIgnoreTemplate.txt
+    gitPath=$(git rev-parse --git-dir)
+
+    cat ${gitPath}/gitIgnoreTemplate.txt > .gitignore
+    rm ${gitPath}/gitIgnoreTemplate.txt
 
     if [[ ${gitExists} == false ]]
         then
