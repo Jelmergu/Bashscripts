@@ -13,12 +13,13 @@ function gitPush {
     do
         if [[ ${var} = "-ct" ]]
             then
-            git status
+            echo "On branch ${branch}"
+            git status -s
             read -p "Continue: " choice
             if [[ ${choice} != "n" && ${choice} != "no" && ${choice} != "No" && ${choice} != "N" ]]
                 then
-                git a
-                git ct
+                git add .
+                git commit -F gitCommit.txt
             else
                 return 0
             fi
