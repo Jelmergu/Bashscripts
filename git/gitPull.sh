@@ -47,7 +47,8 @@ function gitPull {
     git pull "${option}""${remote}" "${branch}"
     if [[ ${stashed} == "true" ]]
         then
-        git stash pop
+        git stash apply
+        git stash drop
     fi
 
 }

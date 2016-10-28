@@ -4,7 +4,6 @@
 # 
 # Made by: Jelmer Wijnja
 # Made for: Personal use
-# TODO check for submodules
 
 function gitInit {
 
