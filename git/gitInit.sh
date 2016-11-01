@@ -30,12 +30,12 @@ function gitInit {
         then
         echo "First Commit" > gitCommit.txt
         echo "${PWD}" >> ~/gitrepos.txt
-        sort ~/gitrepos.txt | uniq -u > ~/gitrepos.txt
+        sort -u ~/gitrepos.txt > ~/gitrepos.txt
     fi
     
     if [[ ${gitExists} == true ]]
         then
         echo "${tmp}" >> .gitignore
-        sort .gitignore | uniq -u > .gitignore
+        sort -u .gitignore > .gitignore
     fi
 }
