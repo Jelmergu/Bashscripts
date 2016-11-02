@@ -17,12 +17,14 @@ function gitPush {
     upstream=$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))
     IFS='/' read -ra ADDR <<< "$upstream"
     for i in "${ADDR[@]}"; do
-        if [ -n ${remote} ]
+        if [ -z ${remote} ]
         then
             remote="${i}"
-        elif [ -n ${branch} ]
+
+        elif [ -z "${branch}" ]
         then
             branch="${i}"
+
         else
             branch="${branch}/${i}"
         fi
@@ -72,7 +74,7 @@ function gitPush {
             then
             remote=${var}
             next=""
-        
+
         else
             if [[ ${next} != "" ]]
                 then
@@ -88,9 +90,5 @@ function gitPush {
         option=""
     fi
 
-    if [ -n "${branch}" ]
-    then
-        remote="origin"
-    fi
     git push "${option}""${remote}" "${branch}"
 }
