@@ -7,14 +7,16 @@
 
 function gitInit {
 
-    if [ -d .git or -f .git ]
+    if [ -d .git ] || [ -f .git ]
         then
         gitExists=true
         tmp=""
 
-        if [ -f .gitignore ]
+        if [ -f $(git rev-parse --show-toplevel)/.gitignore ]
             then
-            tmp=$(cat .gitignore)
+            gitDir=$(git rev-parse --show-toplevel)
+            tmp=$(cat ${gitDir}/.gitignore)
+
         fi
     else
         gitExists=false
@@ -29,13 +31,14 @@ function gitInit {
     if [[ ${gitExists} == false ]]
         then
         echo "First Commit" > gitCommit.txt
-        echo "${PWD}" >> ~/gitrepos.txt
-        sort -u ~/gitrepos.txt > ~/gitrepos.txt
     fi
-    
+
     if [[ ${gitExists} == true ]]
         then
         echo "${tmp}" >> .gitignore
-        sort -u .gitignore > .gitignore
+        echo "$(sort -u ${gitDir}/.gitignore)" > ${gitDir}/.gitignore
     fi
+
+    echo "${PWD}" >> ~/gitrepos.txt
+    echo "$(sort -u ~/gitrepos.txt)" > ~/gitrepos.txt
 }
