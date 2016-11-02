@@ -11,15 +11,17 @@ function gitPull {
     next=""
     option=""
     stashed=""
+    status=$(git status -z)
 
-    if [[ $(git status) == *"working tree clean"* ]]
+    if [ -n "${status}" ]
         then
-        stashed="false"
-    else
+        echo "git stash needed"
         git stash
         stashed="true"
+    else
+        echo "git stash not needed"
+        stashed="false"
     fi
-
     for var in $@
     do
         if [[ ${next} = "-b" ]]
