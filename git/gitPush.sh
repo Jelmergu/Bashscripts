@@ -11,9 +11,33 @@ function gitPush {
 #   --recurse-submodules, --thin, --receive-pack, --exec, -u, --set-upstream, --progress, --prune, --no-verify, --follow-tags, --signed, --atomic, -o, --push-option,
 #   -4, --ipv4, -6, --ipv6
 # Already used by git push
+    branch=""
+    remote=""
 
-    branch=$(git rev-parse --abbrev-ref HEAD)
-    remote="origin"
+    upstream=$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))
+    IFS='/' read -ra ADDR <<< "$upstream"
+    for i in "${ADDR[@]}"; do
+        if [ -n ${remote} ]
+        then
+            remote="${i}"
+        elif [ -n ${branch} ]
+        then
+            branch="${i}"
+        else
+            branch="${branch}/${i}"
+        fi
+    done
+
+    if [ -n "${branch}" ]
+    then
+        branch=$(git rev-parse --abbrev-ref HEAD)
+    fi
+
+    if [ -n "${remote}" ]
+    then
+        remote="origin"
+    fi
+
     next=""
     option=""
     for var in $@
@@ -62,6 +86,11 @@ function gitPush {
     if [[ ${option} == " " ]]
         then
         option=""
+    fi
+
+    if [ -n "${branch}" ]
+    then
+        remote="origin"
     fi
     git push "${option}""${remote}" "${branch}"
 }
