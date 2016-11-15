@@ -6,18 +6,19 @@
 # Made for: Personal use
 
 function gitFirstRun {
-    templateDir=$(dirname "${BASH_SOURCE[0]}")"/template"
+    templateDir="/home/"$(whoami)"/.git_template"
     if [[ -d ${templateDir} ]]
-        then
+       then
         echo "Directory is present, no need to create directory"
     else
         echo "Directory is not present, creating directory"
         mkdir ${templateDir}
     fi
-    cp -R template/ ${templateDir}
+ 
+    cp -R $(dirname "${BASH_SOURCE[0]}")"/template" ${templateDir}
     
     # Changing some global configurations
-    git config --global init.templatedir '/.git_template'
+    git config --global init.templatedir '~/.git_template'
     git config --global core.excludesfile '~/.gitignore'
 
     # Adding some aliasses
