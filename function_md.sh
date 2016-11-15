@@ -7,19 +7,12 @@
 # Made for: Personal use
 
 function md {
-    directory=${1:-default}
-    if [ ${directory} = "-h" ]
-        then
-        echo "This function is an extention on mkdir. 
-The created directory will become the active directory
 
-    usage: md [-h] [directory name]
-"
-    elif [ ${directory} = "default" ]
+    if [ -z "${1}" ]
     then
         echo "No directory specified"
     else
-        mkdir ${directory}
-        cd ${directory}
+        mkdir "${1}"
+        cd "${1}"
     fi
 }

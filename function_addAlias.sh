@@ -2,9 +2,7 @@
 #
 
 function addAlias { 
-    naam=${1:-none}
-    cmd=${2:-none}
-
+    local destination=""
     if [ -f ~/.bash_aliases ]
         then
         destination=~/.bash_aliases
@@ -16,21 +14,20 @@ function addAlias {
         return
     fi
 
-    if [[ ${naam} = "none" && ${cmd} = "none" ]]
+    if [ -z "${1}" -a -z "${2}" ]
         then
         cat ${destination}
-
-    elif [[ ${naam} = "none" ]]
+    elif [ -z "${1}" ]
         then
         echo "no name specified"
 
-    elif [[ ${cmd} = "none" ]]
+    elif [ -z "${2}" ]
         then
-        echo "no command specified for ${naam}"
+        echo "no command specified for ${1}"
     
     else
-        echo "alias ${naam}='${cmd}'" >>${destination}
-        directory="${PWD}"
+        echo "alias ${1}='${2}'" >>${destination}
+        local directory="${PWD}"
         rebash
         cd ${directory}
     fi

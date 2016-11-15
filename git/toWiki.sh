@@ -1,8 +1,9 @@
 #!/bin/bash
 
 function toWiki {
+
     #setting and checking root
-    if [[ $1 == "-s" ]]
+    if [ -n $(contains "${option}" "-s") ]
         then
         root="${2}"
 
@@ -12,14 +13,15 @@ function toWiki {
         return 0
     fi
 
-    next=""
-    wiki="${root}/wikis"
+    local next=""
+    local wiki="${root}/wikis"
 
     # get the parent from the root
     IFS='/' read -ra dirs <<< "${root}"
-    n="${#dirs[@]}"
-    deepestParent="${dirs[${n}-1]}"
+    local n="${#dirs[@]}"
+    local deepestParent="${dirs[${n}-1]}"
 
+    local destination="${PWD}"
     #get the relative path
     while IFS='/' read -ra dirs
         do
@@ -42,21 +44,17 @@ function toWiki {
     # check which way we want to travel
     if [[ ${retour} == "true" ]]
         then
-        dir="${root}/${destination}"
+        destination="${root}/${destination}"
     else
-        dir="${wiki}/${destination}"
+        destination="${wiki}/${destination}"
     fi
 
     #check if the destination exists
-    if [[ -d "${dir}" ]]
+    if [[ -d "${destination}" ]]
         then
-        cd "${dir}"
+        cd "${destination}"
     else
-        echo "${dir} does not exist"
+        echo "${destination} does not exist"
     fi
 
-    #Garbage collecting
-    destination=""
-    retour=""
-    next=""
 }

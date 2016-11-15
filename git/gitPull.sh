@@ -6,45 +6,39 @@
 # Made for: Personal use
 
 function gitPull {
-    branch=$(git rev-parse --abbrev-ref HEAD)
-    remote="origin"
-    next=""
-    option=""
-    stashed=""
-    status=$(git status -z)
+    local option=${@}
+    local branch=$(git rev-parse --abbrev-ref HEAD)
+    local remote="origin"
+    local next=""
+    local option=""
+    local stashed="false"
+    local status=$(git status -z)
+    local i=""
 
-    if [ -n "${status}" ]
+    if [ -n $(contains "${option}" "-s") -o -n "${status}" ]
         then
         echo "git stash needed"
         git stash
         stashed="true"
     else
         echo "git stash not needed"
-        stashed="false"
     fi
-    for var in $@
-    do
-        if [[ ${next} = "-b" ]]
-            then
-            branch=${var}
-            next=""
-        elif [[ ${next} = "-r" ]]
-            then
-            remote=${var}
-            next=""
-        else
-            if [[ ${next} != "" ]]
-                then
-                option="${option} ${next}"
-                next=""
-            fi
-            next=${var}
-        fi
-    done
-    option="${option} ${next}"
-    if [[ ${option} == " " ]]
+
+    if [ -n $(contains "${option}" "-b") ]
         then
-        option=""
+        i=$(contains "${option}" "-b")
+        option=("${option[@]:$!i}")
+        ((i++))
+        branch="${!i}"
+        option=("${option[@]:$!i}")
+    fi
+    if [ -n $(contains "${option}" "-r") ]
+        then
+        i=$(contains "${option}" "-r")
+        option=("${option[@]:$!i}")
+        ((i++))
+        remote="${!i}"
+        option=("${option[@]:$!i}")
     fi
     git pull "${option}""${remote}" "${branch}"
     if [[ ${stashed} == "true" ]]

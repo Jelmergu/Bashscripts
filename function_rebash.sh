@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function rebash {
-    dir=${PWD}
+    local dir=${PWD}
 
     if [ -f /etc/bash.bashrc ]
         then
@@ -13,5 +13,5 @@ function rebash {
         echo "Could not find bashrc location"
         return 0
     fi
-    cd ${dir}
+    cd "${dir}"
 }

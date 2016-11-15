@@ -7,13 +7,20 @@
 # Made for: Personal use
 
 function gitClone {
-    repo=${1:-none}
-    destination=${2:-"."}
-    if [ ${repo} = "none" ]
+    local destination=${2}
+    local fullpath=""
+
+    if [ -z "${1}" -o -z "${2}" ]
         then
-        echo "No repository specified"
+        if [ -z "${1}" ]
+        then
+            echo "No repository specified"
+        else
+        destination="."
+    fi
+
     else
-        git clone "${repo}" ${destination}
+        git clone "${1}" ${destination}
         echo "" > gitCommit.txt
 
         if  [ -f ${destination}/.gitignore ]
@@ -26,9 +33,9 @@ function gitClone {
 
         if [ ${destination} == "." ] 
             then
-            ${fullPath}=${PWD}
+            fullPath=${PWD}
         else
-            ${fullPath}="${PWD}/${destination}"
+            fullPath="${PWD}/${destination}"
         fi
         echo "${fullPath}" >> ~/gitrepos.txt
     fi
