@@ -6,6 +6,27 @@
 # Made for: Personal use
 
 function gitFirstRun {
+
+    read -p "Git username?: " user
+    read -p "Git email?: " email
+
+    while [ -z "${user}" -o -z "${email}" ]
+    do
+        if [  -z "${user}" ]
+        then
+            echo "Username can not be empty"
+            read -p "Git username?: " user
+        fi
+        if [ -z "${email}" ]
+            then
+            echo "email can not be empty"
+            read -p "Git email?: " email
+        fi
+    done
+
+    git config --global user.name "${user}"
+    git config --global user.email "${email}"
+
     templateDir="/home/"$(whoami)"/.git_template"
     if [[ -d ${templateDir} ]]
        then
