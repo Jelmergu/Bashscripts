@@ -43,7 +43,7 @@ function gitPush {
     fi
 
 
-    if [ -n $(contains "${option}" "-ct") ]
+    if [ $(contains "${option}" "-ct") != false ]
         then
         i=$(contains "${option}" "-ct")
         option=("${option[@]:$!i}")
@@ -65,7 +65,7 @@ function gitPush {
             fi
     fi
 
-    if [ -n $(contains "${option}" "-b") ]
+    if [ $(contains "${option}" "-b") != false ]
         then
         i=$(contains "${option}" "-b")
         option=("${option[@]:$!i}")
@@ -73,7 +73,7 @@ function gitPush {
         branch="${!i}"
         option=("${option[@]:$!i}")
     fi
-    if [ -n $(contains "${option}" "-r") ]
+    if [ $(contains "${option}" "-r")  != false ]
         then
         i=$(contains "${option}" "-r")
         option=("${option[@]:$!i}")
@@ -81,6 +81,5 @@ function gitPush {
         remote="${!i}"
         option=("${option[@]:$!i}")
     fi
-    echo "${option[@]}"
-#    git push "${option[@]}""${remote}" "${branch}"
+    git push "${option[@]}""${remote}" "${branch}"
 }
