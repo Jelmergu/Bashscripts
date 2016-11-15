@@ -59,6 +59,12 @@ function gitFirstRun {
         git config --global alias.ca '!git a && git ci'
         git config --global alias.co 'checkout'
         git config --global alias.cm 'checkout master'
+
+         # Git flow aliases
+        git config --global alias.f 'flow'
+        git config --global alias.ff 'flow feature'
+        git config --global alias.fr 'flow release'
+        git config --global alias.fh 'flow hotfix'
     fi
     echo "Done"
 }
