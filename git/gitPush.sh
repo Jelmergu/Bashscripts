@@ -79,6 +79,6 @@ function gitPush {
         remote="${!i}"
         option=("${option[@]:$!i}")
     fi
-
-    git push "${option[@]}""${remote}" "${branch}"
+    echo "${option[@]}"
+#    git push "${option[@]}""${remote}" "${branch}"
 }
