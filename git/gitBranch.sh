@@ -9,8 +9,8 @@ function gitBranch {
     if [ "${1}" = "-d" ]
         then
         git checkout master
-        git branch "${1}" "${2}"
-    elif [ -z "${1}" ]
+        git branch -D "${2}"
+    elif [ "${first}" = "none" ]
         then
         git branch
     else
