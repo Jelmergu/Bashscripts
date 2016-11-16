@@ -3,7 +3,7 @@
 function toWiki {
 
     #setting and checking root
-    if [ -n $(contains "${option}" "-s") ]
+    if [ "${1}" == "-s" ]
         then
         root="${2}"
 
@@ -21,7 +21,6 @@ function toWiki {
     local n="${#dirs[@]}"
     local deepestParent="${dirs[${n}-1]}"
 
-    local destination="${PWD}"
     #get the relative path
     while IFS='/' read -ra dirs
         do
@@ -32,29 +31,29 @@ function toWiki {
                     next='1'
                 elif [[ ${i} == "wikis" ]]
                     then
-                    retour='true'
+                    local retour='true'
 
                 elif [[ ${next} == '1' ]]
                     then
-                        destination="${destination}/${i}"
+                        local destination="${destination}/${i}"
                 fi
             done
         done <<< "${PWD}"
 
+    local dir=""
     # check which way we want to travel
     if [[ ${retour} == "true" ]]
         then
-        destination="${root}/${destination}"
+        dir="${root}/${destination}"
     else
-        destination="${wiki}/${destination}"
+        dir="${wiki}/${destination}"
     fi
 
     #check if the destination exists
-    if [[ -d "${destination}" ]]
+    if [[ -d "${dir}" ]]
         then
-        cd "${destination}"
+        cd "${dir}"
     else
-        echo "${destination} does not exist"
+        echo "${dir} does not exist"
     fi
-
 }
