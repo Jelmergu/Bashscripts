@@ -57,7 +57,7 @@ function gitPush {
             if [ ${choice} == "y" ]
                 then
                 git add .
-                git commit -F  $(git rev-parse --git-dir)/../gitCommit.txt
+                git commit -F  $(git rev-parse --show-toplevel)/gitCommit.txt
             else
                 return 0
             fi
