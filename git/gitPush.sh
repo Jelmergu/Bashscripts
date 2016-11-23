@@ -11,7 +11,7 @@ function gitPush {
 #   --recurse-submodules, --thin, --receive-pack, --exec, -u, --set-upstream, --progress, --prune, --no-verify, --follow-tags, --signed, --atomic, -o, --push-option,
 #   -4, --ipv4, -6, --ipv6
 # Already used by git push
-    local option="${@}"
+    local option=("${@}")
     local branch=""
     local remote=""
     local i=0
@@ -42,44 +42,53 @@ function gitPush {
         remote="origin"
     fi
 
-
-    if [ $(contains "${option}" "-ct") != false ]
+    if [[ $(contains ${option[@]} "-ct") != "false" ]]
         then
-        i=$(contains "${option}" "-ct")
-        option=("${option[@]:$!i}")
-            echo "On branch ${branch}"
-            git status -s
+        i=$(contains "${option[@]}" "-ct")
+        unset option[$i]
+        option=("${option[@]}")
 
-            read -p "Continue: " choice
-            while [ "${choice}" != "y" -a "${choice}" != "n" ]
-            do
-                read -p "${choice} is invalid, please use either 'y' or 'n': " choice
-            done
+        echo "On branch ${branch}"
+        git status -s
 
-            if [ ${choice} == "y" ]
-                then
-                git add .
-                git commit -F  $(git rev-parse --show-toplevel)/gitCommit.txt
-            else
-                return 0
-            fi
+        read -p "Continue: " choice
+        while [ "${choice}" != "y" -a "${choice}" != "n" ]
+        do
+            read -p "${choice} is invalid, please use either 'y' or 'n': " choice
+        done
+
+        if [ ${choice} == "y" ]
+            then
+            git add --all
+            git commit -F  $(git rev-parse --show-toplevel)/gitCommit.txt
+        else
+            return 0
+        fi
     fi
 
-    if [ $(contains "${option}" "-b") != false ]
+    if [[ $(contains "${option[@]}" "-b") != "false" ]]
         then
-        i=$(contains "${option}" "-b")
-        option=("${option[@]:$!i}")
+        i=$(contains "${option[@]}" "-b")
+        unset option[$i]
         ((i++))
-        branch="${!i}"
-        option=("${option[@]:$!i}")
+        branch="${option[$i]}"
+        unset option[$i]
     fi
-    if [ $(contains "${option}" "-r")  != false ]
+
+    if [[ $(contains "${option[@]}" "-r") != "false" ]]
         then
-        i=$(contains "${option}" "-r")
-        option=("${option[@]:$!i}")
+        i=$(contains "${option[@]}" "-r")
+        unset option[$i]
         ((i++))
-        remote="${!i}"
-        option=("${option[@]:$!i}")
+        remote="${option[$i]}"
+        unset option[$i]
     fi
-    git push "${option[@]}""${remote}" "${branch}"
+
+
+    if [[ $(contains "${option[@]}" "-v") != "false" ]] || [[ $(contains "${option[@]}" "--verbose") != "false" ]]
+        then
+        read -p "git push ${option[@]} ${remote} ${branch}"
+    fi
+
+    git push "${option[@]}" "${remote}" "${branch}"
 }
