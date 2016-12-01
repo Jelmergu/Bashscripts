@@ -12,7 +12,16 @@ function md {
     then
         echo "No directory specified"
     else
-        mkdir "${1}"
+        local currentPath=.
+        IFS='/' read -ra ADDR <<< "${1}"
+            for i in "${ADDR[@]}"; do
+                echo "${i}"
+                if [ ! -d "${currentPath}/${i}" ]
+                    then
+                    mkdir "${currentPath}/${i}"
+                fi
+                currentPath="${currentPath}/${i}"
+            done
         cd "${1}"
     fi
 }

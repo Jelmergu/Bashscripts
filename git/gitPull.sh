@@ -60,6 +60,8 @@ function gitPull {
             git stash
             stashed="true"
         fi
+        i=$(contains "${option[@]}" "-s")
+        unset option[$i]
     fi
 
     if [[ $(contains "${option[@]}" "-b") != "false" ]]
