@@ -12,35 +12,9 @@ function gitPush {
 #   -4, --ipv4, -6, --ipv6
 # Already used by git push
     local option=("${@}")
-    local branch=""
+    local branch=$(git rev-parse --abbrev-ref HEAD)
     local remote=""
     local i=0
-
-    local upstream=$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))
-    IFS='/' read -ra ADDR <<< "$upstream"
-    for i in "${ADDR[@]}"; do
-        if [ -z ${remote} ]
-        then
-            remote="${i}"
-
-        elif [ -z "${branch}" ]
-        then
-            branch="${i}"
-
-        else
-            branch="${branch}/${i}"
-        fi
-    done
-
-    if [ -n "${branch}" ]
-    then
-        branch=$(git rev-parse --abbrev-ref HEAD)
-    fi
-
-    if [ -n "${remote}" ]
-    then
-        remote="origin"
-    fi
 
     if [[ $(contains ${option[@]} "-ct") != "false" ]]
         then
@@ -84,6 +58,12 @@ function gitPush {
         unset option[$i]
     fi
 
+    if [ -z ${remote} ]
+        then
+        local upstream=$(git rev-parse --abbrev-ref "${branch}"@{upstream})
+        IFS='/' read -ra ADDR <<< "$upstream"
+        remote="${ADDR[0]}"
+    fi
 
     if [[ $(contains "${option[@]}" "-v") != "false" ]] || [[ $(contains "${option[@]}" "--verbose") != "false" ]]
         then
