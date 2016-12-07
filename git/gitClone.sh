@@ -10,16 +10,19 @@ function gitClone {
     local destination=${2}
     local fullpath=""
 
-    if [ -z "${1}" -o -z "${2}" ]
+    if [ -z "${1}" -o ]
         then
         if [ -z "${1}" ]
         then
             echo "No repository specified"
-        else
-        destination="."
-    fi
+        fi
 
     else
+        if [ -z "${2}" ]
+        then
+            destination="."
+        fi
+
         git clone "${1}" ${destination}
         echo "" > gitCommit.txt
 

@@ -14,32 +14,6 @@ function gitPull {
     local status=$(git status -z)
     local i=""
 
-    local upstream=$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))
-    IFS='/' read -ra ADDR <<< "$upstream"
-    for i in "${ADDR[@]}"; do
-        if [ -z ${remote} ]
-        then
-            remote="${i}"
-
-        elif [ -z "${branch}" ]
-        then
-            branch="${i}"
-
-        else
-            branch="${branch}/${i}"
-        fi
-    done
-
-    if [ -n "${branch}" ]
-    then
-        branch=$(git rev-parse --abbrev-ref HEAD)
-    fi
-
-    if [ -n "${remote}" ]
-    then
-        remote="origin"
-    fi
-
     if [ $(contains "${option[@]}" "-s") != false -o -n "${status}" ]
         then
         if [ $(contains "${option[@]}" "-s") == false ]
@@ -75,20 +49,27 @@ function gitPull {
 
     if [[ $(contains "${option[@]}" "-r") != "false" ]]
         then
-        echo "remote"
         i=$(contains "${option[@]}" "-r")
         unset option[$i]
         ((i++))
+
         remote="${option[$i]}"
         unset option[$i]
     fi
 
-    if [[ $(contains "${option[@]}" "-v") != "false" ]] || [[ $(contains "${option[@]}" "--verbose") != "false" ]]
+    if [ -z ${remote} ]
+        then
+        local upstream=$(git rev-parse --abbrev-ref "${branch}"@{upstream})
+        IFS='/' read -ra ADDR <<< "$upstream"
+        local remote="${ADDR[0]}"
+    fi
+
+     if [[ $(contains "${option[@]}" "-v") != "false" ]] || [[ $(contains "${option[@]}" "--verbose") != "false" ]]
         then
         read -p "git pull ${option[@]} ${remote} ${branch}"
     fi
 
-    git pull "${option}" "${remote}" "${branch}"
+    git pull "${option[@]}" "${remote}" "${branch}"
 
     if [ ${stashed} == "true" ]
         then
