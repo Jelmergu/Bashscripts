@@ -12,8 +12,10 @@ function md {
     then
         echo "No directory specified"
     else
+        # Split the path
         local currentPath=.
         IFS='/' read -ra ADDR <<< "${1}"
+            # Navigate or create every parent directory
             for i in "${ADDR[@]}"; do
                 echo "${i}"
                 if [ ! -d "${currentPath}/${i}" ]
@@ -22,6 +24,7 @@ function md {
                 fi
                 currentPath="${currentPath}/${i}"
             done
+        # Change directory to the created directory
         cd "${1}"
     fi
 }
