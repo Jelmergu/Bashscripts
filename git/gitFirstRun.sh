@@ -51,7 +51,7 @@ function gitFirstRun {
         mkdir ${templateDir}
     fi
  
-    cp -R $(dirname "${BASH_SOURCE[0]}")"/template" ${templateDir}
+    cp -R $(dirname "${BASH_SOURCE[0]}")"/template/*" ${templateDir}
     
     # Changing some global configurations
     git config --global init.templatedir '~/.git_template'
