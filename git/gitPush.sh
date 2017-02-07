@@ -17,7 +17,7 @@ function gitPush {
     local i=0
 
     # check if the commit flag is set
-    if [[ $(contains ${option[@]} "-ct") != "false" ]]
+    if [[ $(contains ${option[@]} "-cat") != "false" ]]
         then
         # Remove -ct flag from the options, is not a valid git push flag
         i=$(contains "${option[@]}" "-ct")
@@ -40,6 +40,91 @@ function gitPush {
             then
             git add --all
             git commit -F  $(git rev-parse --show-toplevel)/gitCommit.txt
+        # Do not commit
+        else
+            return 0
+        fi
+    fi
+
+    if [[ $(contains ${option[@]} "-ct") != "false" ]]
+        then
+        # Remove -ct flag from the options, is not a valid git push flag
+        i=$(contains "${option[@]}" "-ct")
+        unset option[$i]
+        option=("${option[@]}")
+
+        # Ask user if they want to commit everything
+        echo "On branch ${branch}"
+        git status -s
+
+        read -p "Continue: " choice
+        # Invalid choices
+        while [ "${choice}" != "y" -a "${choice}" != "n" ]
+        do
+            read -p "${choice} is invalid, please use either 'y' or 'n': " choice
+        done
+
+        # Commit with a message taken from gitCommit
+        if [ ${choice} == "y" ]
+            then
+            git commit -F  $(git rev-parse --show-toplevel)/gitCommit.txt
+        # Do not commit
+        else
+            return 0
+        fi
+    fi
+
+    if [[ $(contains ${option[@]} "-cm") != "false" ]]
+        then
+        # Remove -ct flag from the options, is not a valid git push flag
+        i=$(contains "${option[@]}" "-cm")
+        unset option[$i]
+        option=("${option[@]}")
+
+        # Ask user if they want to commit everything
+        echo "On branch ${branch}"
+        git status -s
+
+        read -p "Continue: " choice
+        # Invalid choices
+        while [ "${choice}" != "y" -a "${choice}" != "n" ]
+        do
+            read -p "${choice} is invalid, please use either 'y' or 'n': " choice
+        done
+
+        # Commit with a message taken from gitCommit
+        if [ ${choice} == "y" ]
+            then
+            git commit
+        # Do not commit
+        else
+            return 0
+        fi
+    fi
+
+    if [[ $(contains ${option[@]} "-cam") != "false" ]]
+        then
+        # Remove -ct flag from the options, is not a valid git push flag
+        i=$(contains "${option[@]}" "-cam")
+        unset option[$i]
+        option=("${option[@]}")
+
+        # Ask user if they want to commit everything
+        echo "On branch ${branch}"
+        git status -s
+
+        read -p "Continue: " choice
+        # Invalid choices
+        while [ "${choice}" != "y" -a "${choice}" != "n" ]
+        do
+            read -p "${choice} is invalid, please use either 'y' or 'n': " choice
+        done
+
+        # Commit with a message taken from gitCommit
+        if [ ${choice} == "y" ]
+            then
+            git add --all
+            git commit
         # Do not commit
         else
             return 0
