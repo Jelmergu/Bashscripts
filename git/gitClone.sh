@@ -10,7 +10,7 @@ function gitClone {
     local destination=${2}
     local fullpath=""
 
-    if [ -z "${1}" -o ]
+    if [ -z "${1}" ]
         then
         if [ -z "${1}" ]
         then
@@ -34,7 +34,7 @@ function gitClone {
         fi
         rm ${destination}/.git/gitIgnoreTemplate.txt
 
-        if [ ${destination} == "." ] 
+        if [ ${destination} == "." ]
             then
             fullPath=${PWD}
         else
