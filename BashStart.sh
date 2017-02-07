@@ -13,6 +13,7 @@ fileLoc=$(dirname "${BASH_SOURCE[0]}")
 . ${fileLoc}/function_addAlias.sh
 . ${fileLoc}/function_rebash.sh
 . ${fileLoc}/function_tomcatc.sh
+. ${fileLoc}/function_watch.sh
 
 
 #Git functions:x
