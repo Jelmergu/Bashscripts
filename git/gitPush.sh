@@ -19,7 +19,7 @@ function gitPush {
     if [[ $(contains ${option[@]} "-cat") != "false" ]]
         then
         # Remove -ct flag from the options, is not a valid git push flag
-        i=$(contains "${option[@]}" "-ct")
+        i=$(contains "${option[@]}" "-cat")
         unset option[$i]
         option=("${option[@]}")
 
@@ -38,7 +38,7 @@ function gitPush {
         if [ ${choice} == "y" ]
             then
             git add --all
-            git commit -F  $(git rev-parse --show-toplevel)/gitCommit.txt
+            git commit -s -F  $(git rev-parse --show-toplevel)/gitCommit.txt
         # Do not commit
         else
             return 0
@@ -66,7 +66,7 @@ function gitPush {
         # Commit with a message taken from gitCommit
         if [ ${choice} == "y" ]
             then
-            git commit -F  $(git rev-parse --show-toplevel)/gitCommit.txt
+            git commit -s -F  $(git rev-parse --show-toplevel)/gitCommit.txt
         # Do not commit
         else
             return 0
@@ -94,7 +94,7 @@ function gitPush {
         # Commit with a message taken from gitCommit
         if [ ${choice} == "y" ]
             then
-            git commit
+            git commit -s
         # Do not commit
         else
             return 0
@@ -123,7 +123,7 @@ function gitPush {
         if [ ${choice} == "y" ]
             then
             git add --all
-            git commit
+            git commit -s
         # Do not commit
         else
             return 0
