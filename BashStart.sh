@@ -14,7 +14,7 @@ fileLoc=$(dirname "${BASH_SOURCE[0]}")
 . ${fileLoc}/function_rebash.sh
 . ${fileLoc}/function_tomcatc.sh
 . ${fileLoc}/function_watch.sh
-
+. ${fileLoc}/function_rememberLocation.sh
 
 # Git functions
 . ${fileLoc}/git/gitInit.sh
