@@ -12,33 +12,36 @@ function gitInit {
     local tmp=""
 
     if [ -d .git ] || [ -f .git ]
-        then
+    then
         gitExists=true
         tmp=""
 
         if [ -f $(git rev-parse --show-toplevel)/.gitignore ]
-            then
+        then
             gitDir=$(git rev-parse --show-toplevel)
             tmp=$(cat ${gitDir}/.gitignore)
-
         fi
     else
         gitExists=false
     fi
+
     git init
 
     local gitPath=$(git rev-parse --git-dir)
 
-    cat ${gitPath}/gitIgnoreTemplate.txt > .gitignore
-    rm ${gitPath}/gitIgnoreTemplate.txt
+    if [ -e ${gitPath}/gitIgnoreTemplate.txt ]
+    then
+        cat ${gitPath}/gitIgnoreTemplate.txt > .gitignore
+        rm ${gitPath}/gitIgnoreTemplate.txt
+    fi
 
-    if [[ ${gitExists} == false ]]
-        then
+    if [ ${gitExists} == false ]
+    then
         echo "First Commit" > gitCommit.txt
     fi
 
-    if [[ ${gitExists} == true ]]
-        then
+    if [ ${gitExists} == true ]
+    then
         echo "${tmp}" >> .gitignore
         echo "$(sort -u ${gitDir}/.gitignore)" > ${gitDir}/.gitignore
     fi

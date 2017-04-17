@@ -11,7 +11,7 @@ function gitClone {
     local fullpath=""
 
     if [ -z "${1}" ]
-        then
+    then
         if [ -z "${1}" ]
         then
             echo "No repository specified"
@@ -24,22 +24,30 @@ function gitClone {
         fi
 
         git clone "${1}" ${destination}
-        echo "" > gitCommit.txt
+        echo "" > ${destination}/gitCommit.txt
 
         if  [ -f ${destination}/.gitignore ]
-            then
+        then
             echo "gitignore exists in repository"
-        else
+
+            if [ -e ${destination}/.git/gitIgnoreTemplate.txt ]
+            then
+                rm ${destination}/.git/gitIgnoreTemplate.txt
+            fi
+
+        else if [ -e ${destination}/.git/gitIgnoreTemplate.txt ]
+        then
             cat ${destination}/.git/gitIgnoreTemplate.txt > ${destination}/.gitignore
+            rm ${destination}/.git/gitIgnoreTemplate.txt
         fi
-        rm ${destination}/.git/gitIgnoreTemplate.txt
 
         if [ ${destination} == "." ]
-            then
+        then
             fullPath=${PWD}
         else
             fullPath="${PWD}/${destination}"
         fi
+
         echo "${fullPath}" >> ~/gitrepos.txt
     fi
 }

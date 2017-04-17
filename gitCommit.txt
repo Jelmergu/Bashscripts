@@ -1,0 +1,1 @@
+Check if gitIgnore template exists in gitClone and gitInit

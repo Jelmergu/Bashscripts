@@ -1,10 +1,11 @@
 #!/bin/bash
 
 function rememberLocation {
-  echo ${PWD} > /.lastLocation
+  echo ${PWD} > ~/.lastLocation
 }
 
-if [ -f /.lastLocation ]
+if [ -f ~/.lastLocation ]
     then
-    cd "$(head -n 1 /.lastLocation)"
+    cd "$(head -n 1 ~/.lastLocation)"
 fi
+
