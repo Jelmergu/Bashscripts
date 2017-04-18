@@ -35,7 +35,7 @@ function gitClone {
                 rm ${destination}/.git/gitIgnoreTemplate.txt
             fi
 
-        else if [ -e ${destination}/.git/gitIgnoreTemplate.txt ]
+        elif [ -e ${destination}/.git/gitIgnoreTemplate.txt ]
         then
             cat ${destination}/.git/gitIgnoreTemplate.txt > ${destination}/.gitignore
             rm ${destination}/.git/gitIgnoreTemplate.txt
