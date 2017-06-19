@@ -37,6 +37,5 @@ function rd {
             echo "${directory} deleted"
         fi
         echo "${directory} deleted"
-        cd "${directory}"
     fi
 }
