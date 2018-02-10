@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 # Extention on git init that creates a gitCommit file and a .gitignore file
 # 
