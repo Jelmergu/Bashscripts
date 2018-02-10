@@ -17,17 +17,14 @@ function gitPull {
     local i=""
 
     # Check if a stash should be executed
-    if [ $(contains "${option[@]}" "-s") != false -o -n "${status}" ]
+    if [[ $(contains "${option[@]}" "-s") != false || -n "${status}" ]]
         then
         # Check if the stash is not forced
         if [ $(contains "${option[@]}" "-s") == false ]
         then
             # Ask to execute git stash
             read -p "Execute git stash? [y/n]: " choice
-            while [ "${choice}" != "y" -a "${choice}" != "n" ]
-            do
-                read -p "${choice} is invalid, please use either 'y' or 'n': " choice
-            done
+            choice=$(strictChoice "${choice}")
 
             # Execute git stash
             if [ ${choice} == "y" ]
@@ -46,7 +43,7 @@ function gitPull {
     fi
 
     # Check if the branch has been specified
-    if [[ $(contains "${option[@]}" "-b") != "false" ]]
+    if [ $(contains "${option[@]}" "-b") != "false" ]
         then
         # Remove branch flag and the branch, as they are not valid git pull options
         i=$(contains "${option[@]}" "-b")
@@ -58,7 +55,7 @@ function gitPull {
     fi
 
     # Check if the remote has been specified
-    if [[ $(contains "${option[@]}" "-r") != "false" ]]
+    if [ $(contains "${option[@]}" "-r") != "false" ]
         then
         # Remove remote flag and the remote, as they are not valid git push options
         i=$(contains "${option[@]}" "-r")
@@ -80,7 +77,7 @@ function gitPull {
     fi
 
     # Check if verbose flag is set
-     if [[ $(contains "${option[@]}" "-v") != "false" ]] || [[ $(contains "${option[@]}" "--verbose") != "false" ]]
+     if [[ $(contains "${option[@]}" "-v") != "false" || $(contains "${option[@]}" "--verbose") != "false" ]]
         then
         # Output what to do
         read -p "git pull ${option[@]} ${remote} ${branch}"

@@ -30,16 +30,18 @@ function gitClone {
         then
             echo "gitignore exists in repository"
 
-            if [ -e ${destination}/.git/gitIgnoreTemplate.txt ]
+
+
+        elif [[ -e ${destination}/.git/gitIgnoreTemplate.txt || $(contains "${option[@]}" "--no-gitignore") != "false" ]]
+        then
+            cat ${destination}/.git/gitIgnoreTemplate.txt > ${destination}/.gitignore
+
+        fi
+
+        if [ -e ${destination}/.git/gitIgnoreTemplate.txt ]
             then
                 rm ${destination}/.git/gitIgnoreTemplate.txt
             fi
-
-        elif [ -e ${destination}/.git/gitIgnoreTemplate.txt ]
-        then
-            cat ${destination}/.git/gitIgnoreTemplate.txt > ${destination}/.gitignore
-            rm ${destination}/.git/gitIgnoreTemplate.txt
-        fi
 
         if [ ${destination} == "." ]
         then

@@ -1,4 +1,4 @@
-#!/bin/bash
+!/bin/bash
 
 # Extention on git init that creates a gitCommit file and a .gitignore file
 # 
@@ -10,8 +10,9 @@ function gitInit {
     local gitExists=false
     local gitDir=""
     local tmp=""
+    local option=("${@}")
 
-    if [ -d .git ] || [ -f .git ]
+    if [[ -d .git  ||  -f .git ]]
     then
         gitExists=true
         tmp=""
@@ -43,7 +44,10 @@ function gitInit {
     if [ ${gitExists} == true ]
     then
         echo "${tmp}" >> .gitignore
-        echo "$(sort -u ${gitDir}/.gitignore)" > ${gitDir}/.gitignore
+        if [ $(contains "${option[@]}" "--ignore-gitignore") != false ]
+        then
+            echo "$(sort -u ${gitDir}/.gitignore)" > ${gitDir}/.gitignore
+        fi
     fi
 
     echo "${PWD}" >> ~/gitrepos.txt
