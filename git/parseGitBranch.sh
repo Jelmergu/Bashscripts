@@ -36,7 +36,6 @@ function parseGitBranch {
         ["DR"]=deleted
         ["DC"]=deleted
 
-        ["R"]=moved
         ["R "]=moved
         ["RM"]=moved
         ["RD"]=moved
