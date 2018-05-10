@@ -17,7 +17,7 @@ function gitPush {
     local i=0
 
     # check if the commit flag is set
-    if [[ $(contains ${option[@]} "-cat") != "false" ]]
+    if [ $(contains ${option[@]} "-cat") != "false" ]
         then
         # Remove -ct flag from the options, is not a valid git push flag
         i=$(contains "${option[@]}" "-cat")
@@ -29,11 +29,7 @@ function gitPush {
         git status -s
 
         read -p "Continue: " choice
-        # Invalid choices
-        while [ "${choice}" != "y" -a "${choice}" != "n" ]
-        do
-            read -p "${choice} is invalid, please use either 'y' or 'n': " choice
-        done
+        choice=$(strictChoice "${choice}")
 
         # Commit with a message taken from gitCommit
         if [ ${choice} == "y" ]
@@ -46,7 +42,7 @@ function gitPush {
         fi
     fi
 
-    if [[ $(contains ${option[@]} "-ct") != "false" ]]
+    if [ $(contains ${option[@]} "-ct") != "false" ]
         then
         # Remove -ct flag from the options, is not a valid git push flag
         i=$(contains "${option[@]}" "-ct")
@@ -58,11 +54,7 @@ function gitPush {
         git status -s
 
         read -p "Continue: " choice
-        # Invalid choices
-        while [ "${choice}" != "y" -a "${choice}" != "n" ]
-        do
-            read -p "${choice} is invalid, please use either 'y' or 'n': " choice
-        done
+        choice=$(strictChoice "${choice}")
 
         # Commit with a message taken from gitCommit
         if [ ${choice} == "y" ]
@@ -74,7 +66,7 @@ function gitPush {
         fi
     fi
 
-    if [[ $(contains ${option[@]} "-cm") != "false" ]]
+    if [ $(contains ${option[@]} "-cm") != "false" ]
         then
         # Remove -ct flag from the options, is not a valid git push flag
         i=$(contains "${option[@]}" "-cm")
@@ -86,11 +78,7 @@ function gitPush {
         git status -s
 
         read -p "Continue: " choice
-        # Invalid choices
-        while [ "${choice}" != "y" -a "${choice}" != "n" ]
-        do
-            read -p "${choice} is invalid, please use either 'y' or 'n': " choice
-        done
+        choice=$(strictChoice "${choice}")
 
         # Commit with a message taken from gitCommit
         if [ ${choice} == "y" ]

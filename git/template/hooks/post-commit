@@ -10,5 +10,5 @@
 rootDir=$(git rev-parse --show-toplevel)
 if [ -f ${rootDir}/gitCommit.txt ] 
 then
-    echo '' > ${rootDir}/gitCommit.txt
+    echo -n > ${rootDir}/gitCommit.txt
 fi
