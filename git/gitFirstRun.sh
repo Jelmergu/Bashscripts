@@ -70,8 +70,8 @@ function gitFirstRun {
         then
         # Adding some usefull aliasses
         git config --global alias.a 'add -A'
-        git config --global alias.st 'status -s'
-        git config --global alias.ct '!git commit -F $(git rev-parse --git-dir)/../gitCommit.txt'
+        git config --global alias.st 'status -bs'
+        git config --global alias.ct '!git commit -F $(git rev-parse --git-dir)/gitCommit.txt'
 
         git config --global alias.ci 'commit -s'
         git config --global alias.ca '!git a && git ci'
@@ -94,16 +94,19 @@ function gitFirstRun {
             git config --global alias.ffs 'flow feature start'
             git config --global alias.fff 'flow feature finish'
             git config --global alias.ffp 'flow feature publish'
+            git config --global alias.ffd 'flow feature delete'
 
             git config --global alias.fr 'flow release'
             git config --global alias.frs 'flow release start'
             git config --global alias.frf 'flow release finish'
             git config --global alias.frp 'flow release publish'
+            git config --global alias.frd 'flow release delete'
 
             git config --global alias.fh 'flow hotfix'
             git config --global alias.fhs 'flow hotfix start'
             git config --global alias.fhf 'flow hotfix finish'
             git config --global alias.fhp 'flow hotfix publish'
+            git config --global alias.fhd 'flow hotfix delete'
         fi
     fi
 
