@@ -32,6 +32,7 @@ function parseGitBranch {
         ['C']=moved
         ['CM']=moved
         ['AD']=deleted
+        ['AU']=modified
     )
 
     # detect changed, new, deleted, mergin and untracked files
