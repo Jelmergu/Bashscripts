@@ -12,7 +12,7 @@ function parseGitBranch {
 
     local counter=([modified]=0 [new]=0 [deleted]=0 [both]=0 [untracked]=0 [moved]=0)
     local prefix=([modified]=M [new]=N [deleted]=D [both]=BM [untracked]='?' [moved]=MV)
-    local stPrefix=(["M"]=modified ["A"]=new ["D"]=deleted ["UU"]=both ["N"]=untracked ["R"]=moved ['AM']=new ['RM']=moved)
+    local stPrefix=(["M"]=modified ["A"]=new ["D"]=deleted ["UU"]=both ["N"]=untracked ["R"]=moved ['AM']=new ['RM']=moved ['MM']=modified)
 
     # detect changed, new, deleted, mergin and untracked files
     while read -r -d '' state file; do

@@ -12,5 +12,6 @@ function contains {
             return 1
         fi
     }
+    echo false
     return 0
 }
