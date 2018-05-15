@@ -5,11 +5,6 @@ bashLibraryDir=$(dirname "${BASH_SOURCE[0]}")
 function includeDirectory {
     local dir=${1}
 
-    if [ -z "${1}" ]
-    then
-        dir="."
-    fi
-
     for d in "${dir}"/*
     do
 
