@@ -16,7 +16,7 @@ function gitFirstRun {
     read -p "Git username?: " user
     read -p "Git email?: " email
 
-    while [ -z "${user}" -o -z "${email}" ]
+    while [[ -z "${user}" || -z "${email}" ]]
     do
         if [  -z "${user}" ]
         then
@@ -58,11 +58,7 @@ function gitFirstRun {
     git config --global core.excludesfile '~/.gitignore'
 
     read -p "Add usefull aliases? (y/n): " choice
-
-    while [ "${choice}" != "y" -a "${choice}" != "n" ]
-    do
-        read -p "${choice} is invalid, please use either 'y' or 'n': " choice
-    done
+    choice=$(strictChoice "${choice}")
 
     if [ "${choice}" == "y" ]
         then
@@ -81,11 +77,7 @@ function gitFirstRun {
         git config --global alias.cd 'checkout develop'
 
         read -p "Add git flow aliases? (y/n): " choice
-
-        while [ "${choice}" != "y" -a "${choice}" != "n" ]
-        do
-            read -p "${choice} is invalid, please use either 'y' or 'n': " choice
-        done
+        choice=$(strictChoice "${choice}")
 
         if [ "${choice}" == "y" ]
             then
@@ -107,7 +99,6 @@ function gitFirstRun {
             git config --global alias.fhf 'flow hotfix finish'
             git config --global alias.fhp 'flow hotfix publish'
         fi
-
     fi
 
     echo "Done"

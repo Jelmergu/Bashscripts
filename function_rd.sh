@@ -12,10 +12,7 @@ function rd {
     if [ -z "${directory}" -o "${directory}" = "." ]
         then
         read -p "Delete current directory? [y/n]: " choice
-        while [ "${choice}" != "y" -a "${choice}" != "n" ]
-        do
-            read -p "${choice} is invalid, please use either 'y' or 'n': " choice
-        done
+        choice=$(strictChoice "${choice}")
 
         if [ "$choice" = "y" ]
             then
@@ -27,10 +24,7 @@ function rd {
 
     else
         read -p "Delete ${directory}? [y/n]: " choice
-        while [ "${choice}" != "y" -a "${choice}" != "n" ]
-        do
-            read -p "${choice} is invalid, please use either 'y' or 'n': " choice
-        done
+        choice=$(strictChoice "${choice}")
         if [ "$choice" = "y" ]
             then
             rm -Rf "${directory}"
