@@ -19,7 +19,7 @@ function gitPush {
             if [[ ${choice} != "n" && ${choice} != "no" && ${choice} != "No" && ${choice} != "N" ]]
                 then
                 git add .
-                git commit -F gitCommit.txt
+                git commit -F  $(git rev-parse --git-dir)/../gitCommit.txt
             else
                 return 0
             fi
