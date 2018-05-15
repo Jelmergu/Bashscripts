@@ -71,7 +71,7 @@ function gitFirstRun {
         # Adding some usefull aliasses
         git config --global alias.a 'add -A'
         git config --global alias.st 'status -bs'
-        git config --global alias.ct '!git commit -F $(git rev-parse --git-dir)/gitCommit.txt'
+        git config --global alias.ct '!git commit -F $(git rev-parse --show-toplevel)/gitCommit.txt'
 
         git config --global alias.ci 'commit -s'
         git config --global alias.ca '!git a && git ci'
