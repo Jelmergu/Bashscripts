@@ -1,3 +1,5 @@
 template/hooks/*
 template/config
 template/gitIgnoreTemplate.txt
+function_addSite.sh
+
