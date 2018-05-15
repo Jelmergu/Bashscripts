@@ -10,59 +10,61 @@ function gitFirstRun {
     local user
     local email
     local choice
+    local option=("${@}")
 
     local templateDir="~/.git_template"
 
-    read -p "Git username?: " user
-    read -p "Git email?: " email
+    if [[ $(contains ${option[@]} "-c") == "false" ]]
+    then
+        read -p "Git username?: " user
+        read -p "Git email?: " email
 
-    while [ -z "${user}" -o -z "${email}" ]
-    do
-        if [  -z "${user}" ]
-        then
-            echo "Username can not be empty"
-            read -p "Git username?: " user
-        fi
-        if [ -z "${email}" ]
+        while [[ -z "${user}" || -z "${email}" ]]
+        do
+            if [  -z "${user}" ]
             then
-            echo "email can not be empty"
-            read -p "Git email?: " email
+                echo "Username can not be empty"
+                read -p "Git username?: " user
+            fi
+            if [ -z "${email}" ]
+                then
+                echo "email can not be empty"
+                read -p "Git email?: " email
+            fi
+        done
+
+        git config --global user.name "${user}"
+        git config --global user.email "${email}"
+
+        # More failsave, discovered this using BashOnWindows
+        if [ -d "/home/" ] # *nix filesystems
+        then
+            templateDir="/home/"$(whoami)"/.git_template"
+        elif [ -d "/c/" ] # gitbash filesystem
+        then
+            templateDir="/c/Users/"$(whoami)"/.git_template"
         fi
-    done
-
-    git config --global user.name "${user}"
-    git config --global user.email "${email}"
-
-    # More failsave, discovered this using BashOnWindows
-    if [ -d "/home/" ] # *nix filesystems
-    then
-        templateDir="/home/"$(whoami)"/.git_template"
-    elif [ -d "/c/" ] # gitbash filesystem
-    then
-        templateDir="/c/Users/"$(whoami)"/.git_template"
-    fi
 
 
-    if [ -d ${templateDir} ]
-       then
-        echo "Directory is present, no need to create directory"
+        if [ -d ${templateDir} ]
+           then
+            echo "Directory is present, no need to create directory"
+        else
+            echo "Directory is not present, creating directory"
+            mkdir ${templateDir}
+        fi
+
+        cp -R $(dirname "${BASH_SOURCE[0]}")"/template/*" ${templateDir}
+
+        # Changing some global configurations
+        git config --global init.templatedir '~/.git_template'
+        git config --global core.excludesfile '~/.gitignore'
+
+        read -p "Add usefull aliases? (y/n): " choice
+        choice=$(strictChoice "${choice}")
     else
-        echo "Directory is not present, creating directory"
-        mkdir ${templateDir}
-    fi
- 
-    cp -R $(dirname "${BASH_SOURCE[0]}")"/template/*" ${templateDir}
-    
-    # Changing some global configurations
-    git config --global init.templatedir '~/.git_template'
-    git config --global core.excludesfile '~/.gitignore'
-
-    read -p "Add usefull aliases? (y/n): " choice
-
-    while [ "${choice}" != "y" -a "${choice}" != "n" ]
-    do
-        read -p "${choice} is invalid, please use either 'y' or 'n': " choice
-    done
+        choice="y"
+    fi # contains -c flag for commands only
 
     if [ "${choice}" == "y" ]
         then
@@ -81,11 +83,7 @@ function gitFirstRun {
         git config --global alias.cd 'checkout develop'
 
         read -p "Add git flow aliases? (y/n): " choice
-
-        while [ "${choice}" != "y" -a "${choice}" != "n" ]
-        do
-            read -p "${choice} is invalid, please use either 'y' or 'n': " choice
-        done
+        choice=$(strictChoice "${choice}")
 
         if [ "${choice}" == "y" ]
             then
@@ -107,7 +105,6 @@ function gitFirstRun {
             git config --global alias.fhf 'flow hotfix finish'
             git config --global alias.fhp 'flow hotfix publish'
         fi
-
     fi
 
     echo "Done"

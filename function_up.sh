@@ -7,6 +7,9 @@
 
 function up {
     local amount=${1:-1}
+    read -p "Continue:" choice
+    choice=$(strictChoice "${choice}")
+    echo ${choice}
     for (( i = 0; i < ${amount}; i++ )); do
         cd ../
     done

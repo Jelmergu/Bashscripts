@@ -10,26 +10,52 @@ function parseGitBranch {
     declare -A prefix
     declare -A stPrefix
 
-    local counter=([modified]=0 [new]=0 [deleted]=0 [both]=0 [untracked]=0 [moved]=0)
-    local prefix=([modified]=M [new]=N [deleted]=D [both]=BM [untracked]='?' [moved]=MV)
+    local counter=([modified]=0 [new]=0 [deleted]=0 [both]=0 [untracked]=0 [moved]=0 [ignored]=0 [noupdate]=0 [copied]=0)
+    local prefix=([modified]=M [new]=N [deleted]=D [both]=BM [untracked]='?' [ignored]='!' [moved]=MV [noupdate]=NU [copied]=CP)
     local stPrefix=(
+        [" M"]=noupdate
+        [" D"]=noupdate
+
         ["M"]=modified
+        ["M "]=modified
+        ["MM"]=modified
+        ["MD"]=modified
+
         ["A"]=new
+        ["A "]=new
+        ["AM"]=new
+        ["AD"]=new
+
         ["D"]=deleted
-        ["UU"]=both
-        ["N"]=untracked
+        ["D "]=deleted
+        ["DM"]=deleted
+        ["DA"]=deleted
+        ["DR"]=deleted
+        ["DC"]=deleted
+
         ["R"]=moved
-        ['AM']=new
-        ['AA']=new
-        ['??']=new
-        ['DU']=both
-        ['UD']=deleted
-        ['RM']=moved
-        ['MM']=modified
-        ['C']=moved
-        ['CM']=moved
-        ['AD']=deleted
-        ['AU']=modified
+        ["R "]=moved
+        ["RM"]=moved
+        ["RD"]=moved
+
+        ['C']=copied
+        ["C "]=copied
+        ["CM"]=copied
+        ["CD"]=copied
+
+        ["DD"]=deleted
+        ["AU"]=both
+        ["UD"]=deleted
+        ["UA"]=both
+        ["DU"]=modified
+        ["AA"]=both
+        ["UU"]=both #might give MC
+        ["??"]=untracked
+        ["?"]=untracked
+        ["!!"]=ignored
+        ["!"]=ignored
+
+        ["N"]=untracked
     )
 
     # detect changed, new, deleted, mergin and untracked files
@@ -56,53 +82,3 @@ function parseGitBranch {
 
     echo "git branch->${branch}{${result}}"
 }
-
-# v2 sneller door gebruik van numerieke index
-# function parseGitBranch {
-#     branch=$(git rev-parse --abbrev-ref HEAD 2> /dev/null) 
-#     if [[ "${branch}" == "" ]] # do not execute script if PWD is no git repo
-#         then
-#         return 0
-#     fi
-
-#     counter=(0 0 0 0 0)
-#     prefix=(M N D BM U)
-#     #detect changed, new, deleted and mergin files
-#     while IFS='' read -r line || [[ -n "$line" ]]; do
-#         for C in ${line}; do
-
-#             if [[ ${C} == *modified* ]]
-#                 then
-#                     ((counter[0]++))
-#             elif [[ ${C} == *new* ]]
-#                 then
-#                     ((counter[1]++))
-#             elif [[ ${C} == *deleted* ]]
-#                 then
-#                     ((counter[2]++))
-#             elif [[ ${C} == *both* ]]
-#                 then
-#                     ((counter[3]++))
-#             fi
-#         done
-#     done < <(git status)
-
-#     # detect untracked files
-#     while IFS='' read -r line || [[ -n "$line" ]]; do
-#         for C in ${line}; do
-#             ((counter[4]++))
-#         done
-#     done < <(git ls-files --others --exclude-standard)
-
-#     count=0 # for the index of both arrays
-
-#     for C in ${counter[@]}; do #iterate through array
-#         if [[ ${C} != 0 ]] # when any of the changes are detected generate a result
-#             then
-#             result="${result}${prefix[${count}]}:${counter[${count}]} " # the previous result+one of {M,N,D,BM,U}+amount of changes
-#         fi
-#         ((count++)) # increase the count for the index
-#     done
-    
-#     echo "git branch->${branch}{${result}}"
-# }
