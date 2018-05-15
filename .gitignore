@@ -1,4 +1,6 @@
 function_addSite.sh
-template/config
-template/gitIgnoreTemplate.txt
-template/hooks/*
+*/git/template/config
+*/git/template/gitIgnoreTemplate.txt
+*/git/template/hooks/*.sample
+
+testing.sh

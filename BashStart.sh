@@ -21,19 +21,6 @@ function includeDirectory {
     done
 }
 
-function selfUpdate {
-    local branchStatus=$(cd "${bashLibraryDir}" && git fetch origin && git status -b --porcelain)
+includeDirectory $(dirname "${BASH_SOURCE[0]}")/startup
 
-    if [[ "$branchStatus" == *"behind"* ]]
-    then
-        if [[ $BASHLIBRARY_AUTOUPDATE = true ]]
-        then
-            (cd dirname "${BASH_SOURCE[0]}" && git pull --ff-only)
-        else
-            echo -e "BashLibrary is outdated and not allowed to autoupdate\n Run (cd $(dirname ${BASH_SOURCE[0]}) && git pull --ff-only) to update"
-            echo -e "\t Alternativly you could set BASHLIBRARY_AUTOUPDATE to true to perform automatic updates"
-        fi
-    fi
-}
-
-selfUpdate && includeDirectory "${bashLibraryDir}"
+includeDirectory $(dirname "${BASH_SOURCE[0]}")/functions
