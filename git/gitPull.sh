@@ -9,6 +9,17 @@ function gitPull {
     branch=$(git rev-parse --abbrev-ref HEAD)
     remote="origin"
     next=""
+    option=""
+    stashed=""
+
+    if [[ $(git status) == *"working tree clean"* ]]
+        then
+        stashed="false"
+    else
+        git stash
+        stashed="true"
+    fi
+
     for var in $@
     do
         if [[ ${next} = "-b" ]]
@@ -23,5 +34,15 @@ function gitPull {
             next=${var}
         fi
     done
-    git pull "${remote}" "${branch}"
+    option="${option} ${next}"
+    if [[ ${option} == " " ]]
+        then
+        option=""
+    fi
+    git pull "${option}""${remote}" "${branch}"
+    if [[ ${stashed} == "true" ]]
+        then
+        git stash pop
+    fi
+
 }
