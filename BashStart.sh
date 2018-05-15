@@ -1,27 +1,39 @@
 #!/bin/bash
 
-fileLoc=$(dirname "${BASH_SOURCE[0]}")
+bashLibraryDir=$(dirname "${BASH_SOURCE[0]}")
 
-# Functions that get used in some other function of this library
-. ${fileLoc}/function_contains.sh
+function includeDirectory {
+    local dir=${1}
 
+    for d in "${dir}"/*
+    do
 
-# General functions
-. ${fileLoc}/function_md.sh
-. ${fileLoc}/function_up.sh
-. ${fileLoc}/function_rd.sh
-. ${fileLoc}/function_addAlias.sh
-. ${fileLoc}/function_rebash.sh
-. ${fileLoc}/function_tomcatc.sh
-. ${fileLoc}/function_watch.sh
-. ${fileLoc}/function_rememberLocation.sh
+        if [ "${d}" == "." -o "${d}" == ".." -o "${d}" == "${BASH_SOURCE[0]}" ]
+         then
+            echo > /dev/null
+        elif [ -d "${d}" ]
+        then
+            includeDirectory ${d}
+        elif [ "${d: -3}" == ".sh" ]
+        then
+            . "${d}"
+        fi
+    done
+}
 
-#Git functions:x
-. ${fileLoc}/git/gitInit.sh
-. ${fileLoc}/git/gitClone.sh
-. ${fileLoc}/git/gitPush.sh
-. ${fileLoc}/git/gitPull.sh
-. ${fileLoc}/git/gitBranch.sh
-. ${fileLoc}/git/gitFirstRun.sh
-. ${fileLoc}/git/toWiki.sh
-. ${fileLoc}/git/parseGitBranch.sh
+function selfUpdate {
+    local branchStatus=$(cd "${bashLibraryDir}" && git fetch origin && git status -b --porcelain)
+
+    if [[ "$branchStatus" == *"behind"* ]]
+    then
+        if [[ $BASHLIBRARY_AUTOUPDATE = true ]]
+        then
+            (cd dirname "${BASH_SOURCE[0]}" && git pull --ff-only)
+        else
+            echo -e "BashLibrary is outdated and not allowed to autoupdate\n Run (cd $(dirname ${BASH_SOURCE[0]}) && git pull --ff-only) to update"
+            echo -e "\t Alternativly you could set BASHLIBRARY_AUTOUPDATE to true to perform automatic updates"
+        fi
+    fi
+}
+
+selfUpdate && includeDirectory "${bashLibraryDir}"
