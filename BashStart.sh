@@ -1,18 +1,16 @@
 #!/bin/bash
 
+bashLibraryDir=$(dirname "${BASH_SOURCE[0]}")
+
 function includeDirectory {
     local dir=${1}
 
-    if [ -z "${1}" ]
-    then
-        dir="."
-    fi
-
     for d in "${dir}"/*
     do
+
         if [ "${d}" == "." -o "${d}" == ".." -o "${d}" == "${BASH_SOURCE[0]}" ]
          then
-            echo "" > /dev/null
+            echo > /dev/null
         elif [ -d "${d}" ]
         then
             includeDirectory ${d}
@@ -23,4 +21,6 @@ function includeDirectory {
     done
 }
 
-includeDirectory $(dirname "${BASH_SOURCE[0]}")
+includeDirectory $(dirname "${BASH_SOURCE[0]}")/startup
+
+includeDirectory $(dirname "${BASH_SOURCE[0]}")/functions
