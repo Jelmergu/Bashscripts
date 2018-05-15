@@ -6,8 +6,37 @@
 # Made for: Personal use
 
 function gitPush {
-    branch=$(git rev-parse --abbrev-ref HEAD)
-    remote="origin"
+# offlimit options: -v,--verbose, -q, --quiet, --repo, --all, --mirror, -d, --delete, --tags, --n, -n, --dry-run, --porcelain, -f, --force, --force-with-lease,
+#   --recurse-submodules, --thin, --receive-pack, --exec, -u, --set-upstream, --progress, --prune, --no-verify, --follow-tags, --signed, --atomic, -o, --push-option,
+#   -4, --ipv4, -6, --ipv6
+# Already used by git push
+    branch=""
+    remote=""
+
+    upstream=$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))
+    IFS='/' read -ra ADDR <<< "$upstream"
+    for i in "${ADDR[@]}"; do
+        if [ -n ${remote} ]
+        then
+            remote="${i}"
+        elif [ -n ${branch} ]
+        then
+            branch="${i}"
+        else
+            branch="${branch}/${i}"
+        fi
+    done
+
+    if [ -n "${branch}" ]
+    then
+        branch=$(git rev-parse --abbrev-ref HEAD)
+    fi
+
+    if [ -n "${remote}" ]
+    then
+        remote="origin"
+    fi
+
     next=""
     for var in $@
     do
@@ -39,6 +68,15 @@ function gitPush {
         fi
         
     done
-    echo "git push ${remote} ${branch}"
-    git push "${remote}" "${branch}"
+    option="${option}${next}"
+    if [[ ${option} == " " ]]
+        then
+        option=""
+    fi
+
+    if [ -n "${branch}" ]
+    then
+        remote="origin"
+    fi
+    git push "${option}""${remote}" "${branch}"
 }
