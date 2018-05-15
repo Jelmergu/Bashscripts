@@ -6,41 +6,88 @@
 # Made for: Personal use
 
 function gitPull {
-    local option=${@}
+    local option=("${@}")
     local branch=$(git rev-parse --abbrev-ref HEAD)
-    local remote="origin"
+    local remote=""
     local next=""
-    local option=""
     local stashed="false"
     local status=$(git status -z)
     local i=""
 
-    if [ $(contains "${option}" "-s") != false -o -n "${status}" ]
+    local upstream=$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))
+    IFS='/' read -ra ADDR <<< "$upstream"
+    for i in "${ADDR[@]}"; do
+        if [ -z ${remote} ]
         then
-        echo "git stash needed"
-        git stash
-        stashed="true"
-    else
-        echo "git stash not needed"
+            remote="${i}"
+
+        elif [ -z "${branch}" ]
+        then
+            branch="${i}"
+
+        else
+            branch="${branch}/${i}"
+        fi
+    done
+
+    if [ -n "${branch}" ]
+    then
+        branch=$(git rev-parse --abbrev-ref HEAD)
     fi
 
-    if [ $(contains "${option}" "-b") != false ]
-        then
-        i=$(contains "${option}" "-b")
-        option=("${option[@]:$!i}")
-        ((i++))
-        branch="${!i}"
-        option=("${option[@]:$!i}")
+    if [ -n "${remote}" ]
+    then
+        remote="origin"
     fi
-    if [ $(contains "${option}" "-r") != false ]
+
+    if [ $(contains "${option[@]}" "-s") != false -o -n "${status}" ]
         then
-        i=$(contains "${option}" "-r")
-        option=("${option[@]:$!i}")
-        ((i++))
-        remote="${!i}"
-        option=("${option[@]:$!i}")
+        if [ $(contains "${option[@]}" "-s") == false ]
+        then
+            read -p "Execute git stash? [y/n]: " choice
+            while [ "${choice}" != "y" -a "${choice}" != "n" ]
+            do
+                read -p "${choice} is invalid, please use either 'y' or 'n': " choice
+            done
+
+            if [ ${choice} == "y" ]
+                then
+                git stash
+                stashed="true"
+            fi
+
+        else
+            git stash
+            stashed="true"
+        fi
     fi
-    git pull "${option}""${remote}" "${branch}"
+
+    if [[ $(contains "${option[@]}" "-b") != "false" ]]
+        then
+        i=$(contains "${option[@]}" "-b")
+        unset option[$i]
+        ((i++))
+        branch="${option[$i]}"
+        unset option[$i]
+    fi
+
+    if [[ $(contains "${option[@]}" "-r") != "false" ]]
+        then
+        echo "remote"
+        i=$(contains "${option[@]}" "-r")
+        unset option[$i]
+        ((i++))
+        remote="${option[$i]}"
+        unset option[$i]
+    fi
+
+    if [[ $(contains "${option[@]}" "-v") != "false" ]] || [[ $(contains "${option[@]}" "--verbose") != "false" ]]
+        then
+        read -p "git pull ${option[@]} ${remote} ${branch}"
+    fi
+
+    git pull "${option}" "${remote}" "${branch}"
+
     if [ ${stashed} == "true" ]
         then
         git stash apply
