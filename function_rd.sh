@@ -7,15 +7,16 @@
 # Made for: Personal use
 
 function rd {
-    directory=${1:-default}
-    if [ ${directory} = "-h" ] 
+    local directory="${1}"
+
+    if [ -z "${directory}" -o "${directory}" = "." ]
         then
-        echo "This function can remove a directory.
-    usage: rd [-h] [directory]
-        When no arguments are given, current directory will be deleted"
-    elif [ ${directory} = "default" ] || [ ${directory} = "." ]
-        then
-        read -p "Delete current directory?: " choice
+        read -p "Delete current directory? [y/n]: " choice
+        while [ "${choice}" != "y" -a "${choice}" != "n" ]
+        do
+            read -p "${choice} is invalid, please use either 'y' or 'n': " choice
+        done
+
         if [ "$choice" = "y" ]
             then
             directory="${PWD##*/}"
@@ -25,14 +26,17 @@ function rd {
         fi
 
     else
-        read -p "Delete ${directory}?: " choice
+        read -p "Delete ${directory}? [y/n]: " choice
+        while [ "${choice}" != "y" -a "${choice}" != "n" ]
+        do
+            read -p "${choice} is invalid, please use either 'y' or 'n': " choice
+        done
         if [ "$choice" = "y" ]
             then
             rm -Rf "${directory}"
             echo "${directory} deleted"
         fi
         echo "${directory} deleted"
-        cd ${directory}
+        cd "${directory}"
     fi
-    echo 
 }

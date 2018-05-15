@@ -2,6 +2,11 @@
 
 fileLoc=$(dirname "${BASH_SOURCE[0]}")
 
+# Functions that get used in some other function of this library
+. ${fileLoc}/function_contains.sh
+
+
+# General functions
 . ${fileLoc}/function_md.sh
 . ${fileLoc}/function_up.sh
 . ${fileLoc}/function_rd.sh

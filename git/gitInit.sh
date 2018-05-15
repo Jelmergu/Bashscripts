@@ -7,6 +7,10 @@
 
 function gitInit {
 
+    local gitExists=false
+    local gitDir=""
+    local tmp=""
+
     if [ -d .git ] || [ -f .git ]
         then
         gitExists=true
@@ -23,7 +27,7 @@ function gitInit {
     fi
     git init
 
-    gitPath=$(git rev-parse --git-dir)
+    local gitPath=$(git rev-parse --git-dir)
 
     cat ${gitPath}/gitIgnoreTemplate.txt > .gitignore
     rm ${gitPath}/gitIgnoreTemplate.txt

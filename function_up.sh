@@ -6,7 +6,7 @@
 # Made for: Personal use
 
 function up {
-    amount=${1:-1}
+    local amount=${1:-1}
     for (( i = 0; i < ${amount}; i++ )); do
         cd ../
     done

@@ -10,10 +10,12 @@ function gitPush {
 #   --recurse-submodules, --thin, --receive-pack, --exec, -u, --set-upstream, --progress, --prune, --no-verify, --follow-tags, --signed, --atomic, -o, --push-option,
 #   -4, --ipv4, -6, --ipv6
 # Already used by git push
-    branch=""
-    remote=""
+    local option="${@}"
+    local branch=""
+    local remote=""
+    local i=0
 
-    upstream=$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))
+    local upstream=$(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD))
     IFS='/' read -ra ADDR <<< "$upstream"
     for i in "${ADDR[@]}"; do
         if [ -z ${remote} ]
@@ -39,42 +41,44 @@ function gitPush {
         remote="origin"
     fi
 
-    next=""
-    for var in $@
-    do
-        if [[ ${var} = "-ct" ]]
-            then
+    if [ -n $(contains "${option}" "-ct") ]
+        then
+        i=$(contains "${option}" "-ct")
+        option=("${option[@]:$!i}")
             echo "On branch ${branch}"
             git status -s
+
             read -p "Continue: " choice
-            if [[ ${choice} != "n" && ${choice} != "no" && ${choice} != "No" && ${choice} != "N" ]]
+            while [ "${choice}" != "y" -a "${choice}" != "n" ]
+            do
+                read -p "${choice} is invalid, please use either 'y' or 'n': " choice
+            done
+
+            if [ ${choice} == "y" ]
                 then
                 git add .
                 git commit -F  $(git rev-parse --git-dir)/../gitCommit.txt
             else
                 return 0
             fi
-        
-        elif [[ ${next} = "-b" ]]
-            then
-            branch=${var}
-            next=""
-        
-        elif [[ ${next} = "-r" ]]
-            then
-            remote=${var}
-            next=""
-
-        else
-            next=${var}
-        fi
-        
-    done
-    option="${option}${next}"
-    if [[ ${option} == " " ]]
-        then
-        option=""
     fi
 
-    git push "${option}""${remote}" "${branch}"
+    if [ -n $(contains "${option}" "-b") ]
+        then
+        i=$(contains "${option}" "-b")
+        option=("${option[@]:$!i}")
+        ((i++))
+        branch="${!i}"
+        option=("${option[@]:$!i}")
+    fi
+    if [ -n $(contains "${option}" "-r") ]
+        then
+        i=$(contains "${option}" "-r")
+        option=("${option[@]:$!i}")
+        ((i++))
+        remote="${!i}"
+        option=("${option[@]:$!i}")
+    fi
+
+    git push "${option[@]}""${remote}" "${branch}"
 }
