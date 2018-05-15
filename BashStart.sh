@@ -17,4 +17,5 @@ fileLoc=$(dirname "${BASH_SOURCE[0]}")
 . ${fileLoc}/git/gitPull.sh
 . ${fileLoc}/git/gitBranch.sh
 . ${fileLoc}/git/gitFirstRun.sh
-
+. ${fileLoc}/git/toWiki.sh
+# . ${fileLoc}/git/parseGitBranch.sh # Not needed to turn on, function is not actually a good function to use outside of command prompt
