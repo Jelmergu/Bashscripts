@@ -14,7 +14,7 @@ function gitFirstRun {
 
     local templateDir="~/.git_template"
 
-    if [[ $(contains ${option[@]} "-c") == "false" ]]
+    if [[ $(contains ${option[@]} "-c") == "false" && $(contains ${option[@]} "-d") == "false" ]]
     then
         read -p "Git username?: " user
         read -p "Git email?: " email
@@ -36,6 +36,8 @@ function gitFirstRun {
         git config --global user.name "${user}"
         git config --global user.email "${email}"
 
+    elif [[ $(contains ${option[@]} "-c") == "false" ]]
+    then
         # More failsave, discovered this using BashOnWindows
         if [ -d "/home/" ] # *nix filesystems
         then
@@ -45,7 +47,6 @@ function gitFirstRun {
             templateDir="/c/Users/"$(whoami)"/.git_template"
         fi
 
-
         if [ -d ${templateDir} ]
            then
             echo "Directory is present, no need to create directory"
@@ -54,7 +55,7 @@ function gitFirstRun {
             mkdir ${templateDir}
         fi
 
-        cp -R $(dirname "${BASH_SOURCE[0]}")"/template/*" ${templateDir}
+        cp -Rui $(dirname "${BASH_SOURCE[0]}")"/template/" ${templateDir}
 
         # Changing some global configurations
         git config --global init.templatedir '~/.git_template'
