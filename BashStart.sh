@@ -21,6 +21,6 @@ function includeDirectory {
     done
 }
 
-includeDirectory $(dirname "${BASH_SOURCE[0]}")/startup
+includeDirectory $(dirname "${BASH_SOURCE[0]}")/startup &
 
 includeDirectory $(dirname "${BASH_SOURCE[0]}")/functions
