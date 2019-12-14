@@ -6,6 +6,6 @@ function rememberLocation {
 
 if [ -f ~/.lastLocation ]
     then
-    cd "$(head -n 1 ~/.lastLocation)"
+    alias lastLocation='cd "$(head -n 1 ~/.lastLocation)"'
 fi
 
